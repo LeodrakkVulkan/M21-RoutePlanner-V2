@@ -218,7 +218,7 @@ function updateUI() {
         TOTAL: ${totalDistance.toFixed(2)} Gm<br>
         <span style="font-size: 0.9rem; color: #fff;">EST. TIME: ${totalMin} MIN</span><br>
         <span class="buffer-highlight">+ INCLUDES ${bufferMin} min NAV-BUFFER</span><br>
-        <span class="buffer-highlight">+ ${totalRefuelTimeMin} min REFUELING TIME WAS ADDED</span>
+        <span class="buffer-highlight">+ INCLUDES ${totalRefuelTimeMin} min REF-BUFFER</span>
     `;
     
     drawMap();
