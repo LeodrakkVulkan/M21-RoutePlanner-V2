@@ -2,7 +2,6 @@
 let route = [];
 let currentShip;
 let currentDrive;
-let initialPinchDistance = null;
 
 // Map Viewport State
 let mapScale = 5;
@@ -74,61 +73,19 @@ window.onload = () => {
 
     // Touch support for mobile Map Panning
     canvas.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    
-    if (e.touches.length === 1) {
-        // Single finger: Start Panning
+        isDragging = true;
         startDragX = e.touches[0].clientX - mapOffsetX;
         startDragY = e.touches[0].clientY - mapOffsetY;
-    } else if (e.touches.length === 2) {
-        // Two fingers: Start Pinching
-        initialPinchDistance = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-        );
-    }
-}, {passive: true});
-
-canvas.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-
-    if (e.touches.length === 1) {
-        // Panning Logic
-        e.preventDefault(); 
-        mapOffsetX = e.touches[0].clientX - startDragX;
-        mapOffsetY = e.touches[0].clientY - startDragY;
-        drawMap();
-    } else if (e.touches.length === 2 && initialPinchDistance) {
-        // Pinch Zoom Logic
-        e.preventDefault();
-        
-        const currentDistance = Math.hypot(
-            e.touches[0].clientX - e.touches[1].clientX,
-            e.touches[0].clientY - e.touches[1].clientY
-        );
-
-        // Calculate the ratio of change
-        const zoomFactor = currentDistance / initialPinchDistance;
-        
-        // Apply zoom and update distance for the next frame
-        mapScale *= zoomFactor;
-        initialPinchDistance = currentDistance;
-
-        // Keep zoom within your existing bounds
-        mapScale = Math.max(0.5, Math.min(mapScale, 30));
-        
-        drawMap();
-    }
-}, {passive: false});
-
-canvas.addEventListener('touchend', (e) => {
-    if (e.touches.length < 2) {
-        initialPinchDistance = null;
-    }
-    if (e.touches.length === 0) {
-        isDragging = false;
-    }
-});
+    }, {passive: true});
+    canvas.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            e.preventDefault(); // Stop mobile screen scroll
+            mapOffsetX = e.touches[0].clientX - startDragX;
+            mapOffsetY = e.touches[0].clientY - startDragY;
+            drawMap();
+        }
+    }, {passive: false});
+    canvas.addEventListener('touchend', () => isDragging = false);
 
     // Start System Clock
     setInterval(updateClock, 1000);
