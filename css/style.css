@@ -20,6 +20,7 @@ body {
     margin: 0;
     /* dvh ensures it fits mobile screens with dynamic address bars */
     height: 100vh;
+    height: 100svh;
     height: 100dvh; 
     display: flex;
     flex-direction: column;
@@ -54,10 +55,19 @@ h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
 
 .terminal-logo { height: 40px; width: auto; border-radius: 50%; }
 
-.main-container {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
+@media (max-width: 850px) {
+    .main-container {
+        /* Allow the container to scroll vertically ONLY on mobile */
+        flex-direction: column;
+        overflow-y: auto; 
+        height: auto;
+    }
+    .map-container {
+        /* Ensure map doesn't disappear; give it a fixed relative height */
+        height: 50vh; 
+        min-height: 300px;
+        order: -1; /* Keep map at the top for better UX */
+    }
 }
 
 /* Control Panel */
