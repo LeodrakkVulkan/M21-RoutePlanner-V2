@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+    --bg-color: #000000;
+    --primary-orange: #ff7300;
+    --dim-orange: #bb8249;
+    --highlight: #e9b941;
+    --star-color: #ffffff;
+    --crt-glow: rgba(255, 115, 0, 0.1);
+    --font-main: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--primary-orange);
+    font-family: var(--font-main);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+/* Scanline Overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: linear-gradient(rgba(7, 6, 6, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+header {
+    padding: 15px 25px;
+    border-bottom: 2px solid var(--primary-orange);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(17, 14, 11, 0.05);
+    flex-wrap: wrap; /* Helps on smaller screens */
+    gap: 15px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
+
+.terminal-logo {
+    height: 50px;
+    width: auto;
+    opacity: 0.8;
+    border-radius: 50%; /* Smooths the edges since it's a seal */
+}
+
+.main-container {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Control Panel */
+.control-panel {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid var(--dim-orange);
+    padding: 15px;
+    background: rgba(10, 5, 0, 0.4);
+    z-index: 10;
+}
+
+.panel-section { border-bottom: 1px dashed var(--dim-orange); padding-bottom: 15px; }
+
+select, button {
+    width: 100%;
+    background: #111;
+    color: var(--primary-orange);
+    border: 1px solid var(--primary-orange);
+    padding: 10px;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+button:hover { background: var(--primary-orange); color: #000; }
+button.danger { border-color: #880000; color: #ff3333; }
+button.danger:hover { background: #880000; color: #fff; }
+
+/* Route List */
+.route-list {
+    flex: 1;
+    min-height: 500px;
+    max-height: 500px;
+    overflow-y: scroll;
+    border: 1px solid var(--dim-orange);
+    padding: 10px;
+}
+
+.route-stop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid var(--dim-orange);
+    background: rgba(255, 115, 0, 0.05);
+    margin-bottom: 5px;
+}
+
+/* NEW: Highlighted Refuel Step Style */
+.refuel-step {
+    background: rgba(255, 183, 0, 0.15);
+    border-left: 4px solid #ffb700;
+    justify-content: center;
+    color: #ffb700;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-align: center;
+    animation: blink 2s infinite;
+}
+
+.route-stop .dist { font-size: 0.8rem; color: #aaa; }
+.del-btn { background: none; border: none; color: #ff3333; width: auto; padding: 0 5px; margin: 0; font-weight: bold; }
+.del-btn:hover { background: #ff3333; color: #000; }
+
+.total-dist { font-size: 1.2rem; font-weight: bold; margin-top: 10px; color: var(--highlight); }
+
+/* Map Canvas */
+.map-container {
+    flex: 1;
+    border: 1px solid var(--dim-orange);
+    position: relative;
+    background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+canvas { max-width: 100%; max-height: 100%; cursor: default; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: var(--dim-orange); }
+
+/* Fuel Bar & Warnings */
+.fuel-status-container {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px solid var(--primary-orange);
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.fuel-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: #221100;
+    border: 1px solid var(--primary-orange);
+    position: relative;
+}
+
+#fuel-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--primary-orange);
+    transition: width 0.4s ease, background 0.4s ease;
+    box-shadow: 0 0 10px var(--crt-glow);
+}
+
+.warning-text {
+    color: #ff3333;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    border: 1px solid #ff3333;
+    padding: 5px;
+    text-align: center;
+    animation: blink 1s infinite;
+}
+
+.buffer-highlight {
+    color: var(--highlight);
+    font-size: 0.8rem;
+    border-left: 2px solid var(--highlight);
+    padding-left: 5px;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* ==================================
+   MOBILE RESPONSIVENESS OVERRIDES 
+===================================*/
+@media (max-width: 850px) {
+    .main-container {
+        flex-direction: column;
+        overflow-y: auto; /* Allow scrolling down to map on mobile */
+    }
+    
+    .control-panel {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .route-panel {
+        overflow: visible !important;
+    }
+
+    .route-list {
+        min-height: 250px;
+        max-height: 350px;
+    }
+
+    .map-container {
+        min-height: 500px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
