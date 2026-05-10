@@ -10,61 +10,54 @@
     --font-main: 'Share Tech Mono', 'Courier New', monospace;
 }
 
+/* Global Box Sizing */
+* { box-sizing: border-box; }
+
 body {
     background-color: var(--bg-color);
     color: var(--primary-orange);
     font-family: var(--font-main);
     margin: 0;
+    /* dvh ensures it fits mobile screens with dynamic address bars */
     height: 100vh;
+    height: 100dvh; 
     display: flex;
     flex-direction: column;
     overflow: hidden;
     text-transform: uppercase;
 }
 
-/* Scanline Overlay */
+/* Optimized Scanline Overlay */
 body::after {
     content: "";
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: linear-gradient(rgba(7, 6, 6, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 4px, 6px 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 3px, 3px 100%;
     pointer-events: none;
     z-index: 100;
 }
 
 header {
-    padding: 15px 25px;
+    padding: 10px 20px;
     border-bottom: 2px solid var(--primary-orange);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(17, 14, 11, 0.05);
-    flex-wrap: wrap; /* Helps on smaller screens */
-    gap: 15px;
+    background: rgba(17, 14, 11, 0.8);
+    z-index: 10;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+.header-left { display: flex; align-items: center; gap: 15px; }
+h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
 
-h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
-
-.terminal-logo {
-    height: 50px;
-    width: auto;
-    opacity: 0.8;
-    border-radius: 50%; /* Smooths the edges since it's a seal */
-}
+.terminal-logo { height: 40px; width: auto; border-radius: 50%; }
 
 .main-container {
     display: flex;
     flex: 1;
-    padding: 20px;
-    gap: 20px;
+    overflow: hidden;
 }
 
 /* Control Panel */
@@ -72,14 +65,14 @@ h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
     width: 350px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    border: 1px solid var(--dim-orange);
+    gap: 12px;
+    border-right: 1px solid var(--dim-orange);
     padding: 15px;
-    background: rgba(10, 5, 0, 0.4);
-    z-index: 10;
+    background: rgba(10, 5, 0, 0.6);
+    overflow-y: auto;
 }
 
-.panel-section { border-bottom: 1px dashed var(--dim-orange); padding-bottom: 15px; }
+.panel-section { border-bottom: 1px dashed var(--dim-orange); padding-bottom: 10px; }
 
 select, button {
     width: 100%;
@@ -88,25 +81,32 @@ select, button {
     border: 1px solid var(--primary-orange);
     padding: 10px;
     font-family: var(--font-main);
-    font-size: 1rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    outline: none;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    outline: none;
 }
 
 button:hover { background: var(--primary-orange); color: #000; }
+button:active { transform: translateY(1px); }
 button.danger { border-color: #880000; color: #ff3333; }
 button.danger:hover { background: #880000; color: #fff; }
 
-/* Route List */
+/* Route Panel & List */
+.route-panel { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 200px; 
+}
+
 .route-list {
     flex: 1;
-    min-height: 500px;
-    max-height: 500px;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 1px solid var(--dim-orange);
-    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    padding: 5px;
 }
 
 .route-stop {
@@ -114,52 +114,38 @@ button.danger:hover { background: #880000; color: #fff; }
     justify-content: space-between;
     align-items: center;
     padding: 8px;
-    border-bottom: 1px solid var(--dim-orange);
+    border-bottom: 1px solid rgba(187, 130, 73, 0.3);
     background: rgba(255, 115, 0, 0.05);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
 }
 
-/* NEW: Highlighted Refuel Step Style */
+.route-stop .dist { font-size: 0.75rem; color: #aaa; }
+
 .refuel-step {
     background: rgba(255, 183, 0, 0.15);
     border-left: 4px solid #ffb700;
-    justify-content: center;
     color: #ffb700;
-    font-weight: bold;
-    font-size: 0.85rem;
     text-align: center;
+    font-weight: bold;
+    font-size: 0.75rem;
     animation: blink 2s infinite;
 }
 
-.route-stop .dist { font-size: 0.8rem; color: #aaa; }
-.del-btn { background: none; border: none; color: #ff3333; width: auto; padding: 0 5px; margin: 0; font-weight: bold; }
-.del-btn:hover { background: #ff3333; color: #000; }
-
-.total-dist { font-size: 1.2rem; font-weight: bold; margin-top: 10px; color: var(--highlight); }
-
-/* Map Canvas */
-.map-container {
-    flex: 1;
-    border: 1px solid var(--dim-orange);
-    position: relative;
-    background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+.del-btn { 
+    background: none; border: none; color: #ff3333; 
+    width: auto; padding: 0 5px; margin: 0; font-weight: bold; 
 }
 
-canvas { max-width: 100%; max-height: 100%; cursor: default; }
+.total-dist { 
+    font-size: 1.1rem; font-weight: bold; 
+    margin-top: 10px; color: var(--highlight); 
+}
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: var(--dim-orange); }
-
-/* Fuel Bar & Warnings */
+/* Fuel Bar & Warnings Section */
 .fuel-status-container {
-    margin-top: 15px;
-    padding-top: 10px;
+    margin-top: auto; /* Pushes fuel bar to the bottom of the panel */
+    padding-top: 15px;
     border-top: 2px solid var(--primary-orange);
 }
 
@@ -202,6 +188,28 @@ canvas { max-width: 100%; max-height: 100%; cursor: default; }
     font-size: 0.8rem;
     border-left: 2px solid var(--highlight);
     padding-left: 5px;
+    margin-top: 5px;
+}
+
+/* Map Canvas Container */
+.map-container {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(circle at center, #110c08 0%, #000000 100%);
+    overflow: hidden;
+    border: 1px solid var(--dim-orange);
+}
+
+canvas { width: 100%; height: 100%; display: block; touch-action: none; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: var(--dim-orange); }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim-orange) #000;
 }
 
 @keyframes blink {
@@ -210,32 +218,27 @@ canvas { max-width: 100%; max-height: 100%; cursor: default; }
     100% { opacity: 1; }
 }
 
-/* ==================================
-   MOBILE RESPONSIVENESS OVERRIDES 
-===================================*/
+/* Mobile Responsiveness */
 @media (max-width: 850px) {
-    .main-container {
-        flex-direction: column;
-        overflow-y: auto; /* Allow scrolling down to map on mobile */
-    }
+    body { overflow-y: auto; }
+    .main-container { flex-direction: column; height: auto; overflow: visible; }
     
     .control-panel {
         width: 100%;
-        box-sizing: border-box;
-    }
-
-    .route-panel {
-        overflow: visible !important;
-    }
-
-    .route-list {
-        min-height: 250px;
-        max-height: 350px;
+        border-right: none;
+        border-bottom: 1px solid var(--dim-orange);
+        height: auto;
     }
 
     .map-container {
-        min-height: 500px;
-        width: 100%;
-        box-sizing: border-box;
+        height: 60vh; 
+        order: -1; /* Map appears above controls on mobile */
     }
+
+    .route-list {
+        min-height: 200px;
+        max-height: 300px;
+    }
+
+    h1 { font-size: 1.1rem; }
 }
