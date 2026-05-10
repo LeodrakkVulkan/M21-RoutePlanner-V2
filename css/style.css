@@ -58,15 +58,17 @@ h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
 @media (max-width: 850px) {
     .main-container {
         /* Allow the container to scroll vertically ONLY on mobile */
-        flex-direction: column;
+        display: flex;
+        flex-direction: row;
         overflow-y: auto; 
-        height: auto;
+        height: 100vh;
     }
     .map-container {
         /* Ensure map doesn't disappear; give it a fixed relative height */
         height: 50vh; 
         min-height: 300px;
-        order: -1; /* Keep map at the top for better UX */
+        order: -1;
+        flex-grow: 1;/* Keep map at the top for better UX */
     }
 }
 
