@@ -489,11 +489,17 @@ canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: 
     padding: 5px 9px;
     border-bottom: 1px solid var(--dim-orange);
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+.label-short { display: none; }
 
 .ambient-panel-body {
     padding: 8px 10px;
-    min-height: 150px;
+    height: 150px;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
     font-size: 0.78rem;
     line-height: 1.7;
 }
@@ -625,77 +631,103 @@ canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: 
     animation: blink 1.4s infinite;
 }
 
+/* Mobile: one ambient box per corner instead of stacked pairs, so all four
+   are always visible (nothing gets hidden) without crowding one side of the
+   map. Sizes are hard-fixed (not min-height) so they NEVER grow with
+   content - the feed engines prune more aggressively on mobile instead
+   (see initAmbientPanels), so text is deleted earlier rather than the box
+   expanding or overflowing. */
 @media (max-width: 850px) {
+    .label-full { display: none; }
+    .label-short { display: inline; }
+
     .ambient-panel {
-        width: 130px;
+        width: 108px;
         background: rgba(10, 5, 0, 0.55);
         box-shadow: none;
         border-color: rgba(187, 130, 73, 0.5);
     }
 
     .ambient-panel-header {
-        font-size: 0.52rem;
+        font-size: 0.5rem;
         padding: 3px 6px;
     }
 
-    .ambient-panel-body {
-        min-height: 50px;
-        font-size: 0.54rem;
-        line-height: 1.4;
-        padding: 5px 7px;
+    /* The waveform graph is the reference size; every other box is fixed
+       at exactly double its height. */
+    .ambient-waveform-canvas {
+        height: 26px;
+    }
+
+    .ambient-panel-body,
+    .ambient-bounty-body {
+        height: 68px;
+        font-size: 0.5rem;
+        line-height: 1.35;
+        padding: 4px 6px;
+    }
+
+    #news-panel-body {
+        height: 68px; /* mobile drops the desktop 3x-taller treatment to stay uniform */
     }
 
     .ambient-bounty-body {
-        height: 56px;
-        padding: 6px;
-        gap: 6px;
+        gap: 5px;
+        padding: 5px;
     }
 
     .ambient-bounty-body svg {
-        width: 26px !important;
+        width: 20px !important;
         height: auto !important;
     }
 
-    .bounty-label { font-size: 0.5rem; }
-    .bounty-name { font-size: 0.58rem; margin-top: 1px; }
-    .bounty-charge { font-size: 0.48rem; margin-top: 1px; }
-    .bounty-reward { font-size: 0.52rem; margin-top: 2px; }
-    .pirate-alert-text { font-size: 0.5rem; }
+    .bounty-label { font-size: 0.46rem; }
+    .bounty-name { font-size: 0.52rem; margin-top: 1px; }
+    .bounty-charge { font-size: 0.44rem; margin-top: 1px; }
+    .bounty-reward { font-size: 0.48rem; margin-top: 2px; }
+    .pirate-alert-text { font-size: 0.46rem; }
 
-    #news-panel-body {
-        height: 168px;
-        min-height: 168px;
-    }
-
-    .ambient-waveform-canvas {
-        height: 32px;
-    }
-
+    /* Break the stack wrappers out of layout entirely so each panel becomes
+       an independently-positioned direct child of .map-container - lets us
+       put one box in each corner instead of two stacked on one side. */
     .ambient-top-stack,
     .ambient-bottom-stack {
-        gap: 6px;
-    }
-}
-
-/* Even more minimal at phone widths - the map is quite small here, so the
-   ambient screens step back further to stay out of the way. */
-@media (max-width: 480px) {
-    .ambient-bottom-stack {
-        display: none;
+        position: static;
+        display: contents;
     }
 
-    .ambient-panel {
-        width: 108px;
-        background: rgba(10, 5, 0, 0.45);
+    .ambient-scan-panel {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 15;
+        pointer-events: none;
     }
 
-    .ambient-panel-body {
-        min-height: 38px;
-        font-size: 0.5rem;
+    .ambient-waveform-panel {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        z-index: 15;
+        pointer-events: none;
     }
 
-    .ambient-waveform-canvas {
-        height: 26px;
+    .ambient-bounty-panel {
+        position: absolute;
+        /* Offset below the map-hud's focus-label/back-button, which also
+           occupies the top-left corner when zoomed into a planet. */
+        top: 48px;
+        left: 8px;
+        z-index: 15;
+        pointer-events: none;
+    }
+
+    .ambient-news-panel {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        z-index: 15;
+        pointer-events: none;
     }
 }
 
