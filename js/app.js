@@ -952,11 +952,37 @@ function startScanWaveform(canvasId) {
 }
 
 
+// Mobile boxes are much smaller and hard-fixed in size (see the ≤850px
+
+// CSS), so old lines are pruned earlier here rather than letting a big
+
+// backlog build up and rely on overflow-clipping to hide it.
+
+function getAmbientFeedConfig() {
+
+    const isMobileViewport = window.innerWidth <= 850;
+
+    return {
+
+        isMobileViewport,
+
+        scanMaxLines: isMobileViewport ? 3 : 6,
+
+        newsMaxLines: isMobileViewport ? 3 : 12
+
+    };
+
+}
+
+
 function initAmbientPanels() {
 
-    startAmbientFeed('scan-panel-body', AMBIENT_SCAN_LINES, { minDelay: 1800, maxDelay: 3600, maxLines: 6 });
+    const { scanMaxLines, newsMaxLines } = getAmbientFeedConfig();
 
-    startAmbientFeed('news-panel-body', AMBIENT_NEWS_LINES, { minDelay: 6000, maxDelay: 11000, maxLines: 12, typeSpeedMs: 14 });
+
+    startAmbientFeed('scan-panel-body', AMBIENT_SCAN_LINES, { minDelay: 1800, maxDelay: 3600, maxLines: scanMaxLines });
+
+    startAmbientFeed('news-panel-body', AMBIENT_NEWS_LINES, { minDelay: 6000, maxDelay: 11000, maxLines: newsMaxLines, typeSpeedMs: 14 });
 
     startBountyBoard('bounty-panel-body', { minDelay: 6000, maxDelay: 11000, pirateChance: 0.3 });
 
