@@ -1,0 +1,749 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root {
+    --bg-color: #000000;
+    --primary-orange: #ff7300;
+    --dim-orange: #bb8249;
+    --highlight: #e9b941;
+    --star-color: #ffffff;
+    --crt-glow: rgba(255, 115, 0, 0.1);
+    --font-main: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+/* Global Box Sizing */
+* { box-sizing: border-box; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--primary-orange);
+    font-family: var(--font-main);
+    margin: 0;
+    /* dvh ensures it fits mobile screens with dynamic address bars */
+    height: 100vh;
+    height: 100dvh; 
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+/* Optimized Scanline Overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+header {
+    padding: 10px 20px;
+    border-bottom: 2px solid var(--primary-orange);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(17, 14, 11, 0.8);
+    z-index: 10;
+}
+
+.header-left { display: flex; align-items: center; gap: 15px; }
+h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
+
+.terminal-logo { height: 40px; width: auto; border-radius: 50%; }
+
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Control Panel */
+.control-panel {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-right: 1px solid var(--dim-orange);
+    padding: 15px;
+    background: rgba(10, 5, 0, 0.6);
+    overflow-y: auto;
+}
+
+.panel-section { border-bottom: 1px dashed var(--dim-orange); padding-bottom: 10px; }
+
+select, button {
+    width: 100%;
+    background: #111;
+    color: var(--primary-orange);
+    border: 1px solid var(--primary-orange);
+    padding: 10px;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    outline: none;
+}
+
+button:hover { background: var(--primary-orange); color: #000; }
+button:active { transform: translateY(1px); }
+button.danger { border-color: #880000; color: #ff3333; }
+button.danger:hover { background: #880000; color: #fff; }
+
+/* Route Manager (multi-route switcher) */
+.route-manager-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.route-select-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.route-select-row select {
+    flex: 1;
+    width: auto;
+    margin-bottom: 0;
+}
+
+.icon-btn {
+    width: auto;
+    flex: 0 0 auto;
+    padding: 10px 12px;
+    margin-bottom: 0;
+}
+
+.icon-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.icon-btn:disabled:hover {
+    background: #111;
+    color: var(--primary-orange);
+}
+
+.icon-btn.danger:disabled:hover {
+    background: #111;
+    color: #ff3333;
+}
+
+.route-name-input {
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--dim-orange);
+    color: var(--highlight);
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    outline: none;
+}
+
+.route-name-input:focus {
+    border-color: var(--highlight);
+}
+
+#active-route-label {
+    color: var(--highlight);
+    font-weight: bold;
+}
+
+/* Route Panel & List */
+.route-panel { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    min-height: 200px; 
+}
+
+.route-list {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid var(--dim-orange);
+    background: rgba(0,0,0,0.3);
+    padding: 5px;
+}
+
+.route-stop {
+    display: block;
+    padding: 8px;
+    border-bottom: 1px solid rgba(187, 130, 73, 0.3);
+    background: rgba(255, 115, 0, 0.05);
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+}
+
+.stop-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.route-stop .dist { font-size: 0.75rem; color: #aaa; }
+
+.activity-time-note { color: #5ec9c0; margin-top: 2px; }
+
+.stop-action-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.action-select {
+    flex: 1;
+    width: auto;
+    background: #000;
+    border: 1px solid var(--dim-orange);
+    color: var(--primary-orange);
+    font-family: var(--font-main);
+    font-size: 0.65rem;
+    padding: 5px 6px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.action-select:focus {
+    outline: none;
+    border-color: var(--highlight);
+}
+
+.stop-size-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.size-label {
+    font-size: 0.58rem;
+    color: #999;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.size-select {
+    width: auto;
+    flex: 1;
+    min-width: 68px;
+    background: #000;
+    border: 1px solid rgba(187, 130, 73, 0.6);
+    color: var(--highlight);
+    font-family: var(--font-main);
+    font-size: 0.6rem;
+    padding: 4px 5px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.size-select:focus {
+    outline: none;
+    border-color: var(--highlight);
+}
+
+.fixed-duration-note {
+    font-size: 0.62rem;
+    color: #5b9bd5;
+    letter-spacing: 0.5px;
+}
+
+.stop-note-row {
+    margin-top: 4px;
+}
+
+.activity-input {
+    width: 100%;
+    background: #000;
+    border: 1px solid rgba(187, 130, 73, 0.5);
+    color: #ccc;
+    font-family: var(--font-main);
+    font-size: 0.62rem;
+    padding: 4px 6px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.activity-input:focus {
+    outline: none;
+    border-color: var(--highlight);
+}
+
+.activity-input::placeholder {
+    color: #554433;
+}
+
+.stop-icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    min-width: 18px;
+}
+
+.stop-icon {
+    display: inline-flex;
+}
+
+.stop-icon.icon-load { color: var(--primary-orange); }
+.stop-icon.icon-unload { color: var(--highlight); }
+.stop-icon.icon-refuel { color: #ffb700; }
+.stop-icon.icon-note { color: #aaa; }
+.stop-icon.icon-mining { color: #5ec9c0; }
+.stop-icon.icon-refining { color: #5b9bd5; }
+.stop-icon.icon-salvaging { color: #e05c5c; }
+
+#sim-btn {
+    border-color: var(--highlight);
+    color: var(--highlight);
+}
+
+#sim-btn:hover {
+    background: var(--highlight);
+    color: #000;
+}
+
+#sim-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#sim-btn:disabled:hover {
+    background: none;
+    color: var(--highlight);
+}
+
+.refuel-step {
+    background: rgba(255, 183, 0, 0.15);
+    border-left: 4px solid #ffb700;
+    color: #ffb700;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.75rem;
+    animation: blink 2s infinite;
+}
+
+.del-btn { 
+    background: none; border: none; color: #ff3333; 
+    width: auto; padding: 0 5px; margin: 0; font-weight: bold; 
+}
+
+.total-dist { 
+    font-size: 1.1rem; font-weight: bold; 
+    margin-top: 10px; color: var(--highlight); 
+}
+
+/* Fuel Bar & Warnings Section */
+.fuel-status-container {
+    margin-top: auto; /* Pushes fuel bar to the bottom of the panel */
+    padding-top: 15px;
+    border-top: 2px solid var(--primary-orange);
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.fuel-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: #221100;
+    border: 1px solid var(--primary-orange);
+    position: relative;
+}
+
+#fuel-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: var(--primary-orange);
+    transition: width 0.4s ease, background 0.4s ease;
+    box-shadow: 0 0 10px var(--crt-glow);
+}
+
+.warning-text {
+    color: #ff3333;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    border: 1px solid #ff3333;
+    padding: 5px;
+    text-align: center;
+    animation: blink 1s infinite;
+}
+
+.buffer-highlight {
+    color: var(--highlight);
+    font-size: 0.8rem;
+    border-left: 2px solid var(--highlight);
+    padding-left: 5px;
+    margin-top: 5px;
+}
+
+/* Map Canvas Container */
+.map-container {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(circle at center, #110c08 0%, #000000 100%);
+    overflow: hidden;
+    border: 1px solid var(--dim-orange);
+}
+
+canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+
+.map-hud {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.map-hud > * { pointer-events: auto; }
+
+.focus-label {
+    background: rgba(10, 5, 0, 0.75);
+    border: 1px solid var(--highlight);
+    color: var(--highlight);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+}
+
+.back-btn {
+    width: auto;
+    margin-bottom: 0;
+    background: rgba(10, 5, 0, 0.75);
+    border-color: var(--highlight);
+    color: var(--highlight);
+    padding: 8px 12px;
+    font-size: 0.75rem;
+}
+
+.back-btn:hover {
+    background: var(--highlight);
+    color: #000;
+}
+
+/* Ambient flavor screens - a scanning/status feed, a bounty/threat board,
+   and a system news ticker, overlaid on the map like auxiliary CRT readouts.
+   Purely decorative, so clicks/drags pass through to the map underneath. */
+.ambient-panel {
+    width: 280px;
+    background: rgba(10, 5, 0, 0.85);
+    border: 1px solid var(--dim-orange);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+/* Scan feed sits at the top-right; the waveform readout is stacked directly
+   beneath it, sharing the same width and right edge. */
+.ambient-top-stack {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 15;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* News sits at the bottom-right; the bounty/threat board is stacked
+   directly above it, sharing the same width and right edge. */
+.ambient-bottom-stack {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 15;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ambient-waveform-canvas {
+    display: block;
+    width: 100%;
+    height: 72px;
+}
+
+.ambient-panel-header {
+    background: rgba(255, 115, 0, 0.15);
+    color: var(--highlight);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    padding: 5px 9px;
+    border-bottom: 1px solid var(--dim-orange);
+    white-space: nowrap;
+}
+
+.ambient-panel-body {
+    padding: 8px 10px;
+    min-height: 150px;
+    font-size: 0.78rem;
+    line-height: 1.7;
+}
+
+/* News feed: fixed height (exactly 3x the bounty box below), with content
+   scrolled via JS (scrollTop) rather than resized - old lines get smoothly
+   pushed up and out of view as new ones are typed in, and the box itself
+   never changes size while typing. */
+#news-panel-body {
+    height: 360px;
+    min-height: 360px;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+}
+
+.ambient-panel-body .line {
+    display: block;
+    color: var(--primary-orange);
+    opacity: 0.5;
+    word-break: break-word;
+}
+
+.ambient-panel-body .line.latest {
+    color: var(--highlight);
+    opacity: 1;
+}
+
+.ambient-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 12px;
+    background: var(--primary-orange);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+    margin-left: 1px;
+}
+
+/* Bounty / Threat board - alternates between a "wanted" silhouette entry
+   and a multi-ship "pirates sighted near X" alert. Fixed height so the news
+   feed above it (3x this) has an exact, stable reference size. */
+.ambient-bounty-body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    height: 120px;
+    transition: opacity 0.2s ease;
+}
+
+.ambient-bounty-body.bounty-flicker {
+    opacity: 0.08;
+}
+
+.ambient-bounty-body.mode-bounty {
+    flex-direction: row;
+}
+
+.ambient-bounty-body.mode-pirate {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+}
+
+.bounty-silhouette {
+    flex: 0 0 auto;
+    color: #c99a6b;
+    opacity: 0.9;
+}
+
+.bounty-silhouette svg,
+.pirate-ships svg {
+    display: block;
+}
+
+.bounty-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.bounty-label {
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    color: #ff3333;
+    font-weight: bold;
+}
+
+.bounty-name {
+    font-size: 0.82rem;
+    color: var(--highlight);
+    margin-top: 3px;
+    word-break: break-word;
+}
+
+.bounty-charge {
+    font-size: 0.62rem;
+    color: #999;
+    margin-top: 3px;
+    letter-spacing: 0.5px;
+}
+
+.bounty-reward {
+    font-size: 0.72rem;
+    color: #ff3333;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+.pirate-ships {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+    color: #ff5555;
+}
+
+.pirate-ships svg:nth-child(2) {
+    margin-bottom: 8px;
+}
+
+.pirate-ships svg:nth-child(3) {
+    margin-bottom: -4px;
+}
+
+.pirate-alert-text {
+    color: #ff3333;
+    font-size: 0.72rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    animation: blink 1.4s infinite;
+}
+
+@media (max-width: 850px) {
+    .ambient-panel {
+        width: 190px;
+    }
+
+    .ambient-panel-body {
+        min-height: 90px;
+        font-size: 0.64rem;
+    }
+
+    .ambient-bounty-body {
+        height: 90px;
+        padding: 8px;
+    }
+
+    #news-panel-body {
+        height: 270px;
+        min-height: 270px;
+    }
+
+    .ambient-waveform-canvas {
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ambient-bottom-stack {
+        display: none;
+    }
+}
+
+/* CRT flicker/glitch transition, played whenever the camera cuts to a new
+   focus (planet zoom in/out) - a burst of scanline static + brightness
+   flicker, like an old sci-fi terminal snapping to a different camera feed. */
+.crt-flicker-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 30;
+    opacity: 0;
+    background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.10) 0px, rgba(255,255,255,0.10) 1px, transparent 1px, transparent 3px),
+        rgba(255, 255, 255, 0.9);
+    mix-blend-mode: overlay;
+}
+
+.crt-flicker-overlay.active {
+    animation: crt-flicker 550ms steps(1, end) 1;
+}
+
+@keyframes crt-flicker {
+    0%   { opacity: 0; }
+    4%   { opacity: 0.85; }
+    8%   { opacity: 0.05; }
+    13%  { opacity: 0.7; }
+    18%  { opacity: 0.15; }
+    26%  { opacity: 0.6; }
+    34%  { opacity: 0.05; }
+    45%  { opacity: 0.4; }
+    58%  { opacity: 0.1; }
+    70%  { opacity: 0.25; }
+    82%  { opacity: 0.05; }
+    100% { opacity: 0; }
+}
+
+canvas.crt-glitching {
+    animation: crt-glitch 550ms steps(1, end) 1;
+}
+
+@keyframes crt-glitch {
+    0%   { filter: brightness(1) contrast(1); transform: translateX(0); }
+    6%   { filter: brightness(2.6) contrast(1.4); transform: translateX(-3px); }
+    12%  { filter: brightness(0.25) contrast(1.3); transform: translateX(3px); }
+    20%  { filter: brightness(1.9) contrast(1.1); transform: translateX(-2px); }
+    30%  { filter: brightness(0.4); transform: translateX(2px); }
+    42%  { filter: brightness(1.5); transform: translateX(-1px); }
+    55%  { filter: brightness(0.6); transform: translateX(1px); }
+    68%  { filter: brightness(1.2); transform: translateX(0); }
+    82%  { filter: brightness(0.85); transform: translateX(0); }
+    100% { filter: brightness(1) contrast(1); transform: translateX(0); }
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: var(--dim-orange); }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--dim-orange) #000;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 850px) {
+    body { overflow-y: auto; }
+    .main-container { flex-direction: column; height: auto; overflow: visible; }
+    
+    .control-panel {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--dim-orange);
+        height: auto;
+        order: 1;
+    }
+
+    .map-container {
+        height: 60vh; 
+        order: 2;    
+    }
+
+    .route-list {
+        min-height: 200px;
+        max-height: 300px;
+    }
+
+    h1 { font-size: 1.1rem; }
+}
