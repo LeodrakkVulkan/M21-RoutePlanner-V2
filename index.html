@@ -69,33 +69,35 @@
         </div>
     </div>
 
-    <div class="map-container">
-        <canvas id="mapCanvas"></canvas>
+    <div class="map-column">
         <div class="map-hud">
-            <div id="focus-label" class="focus-label" style="display:none;"></div>
-            <button id="back-to-map-btn" class="back-btn" style="display:none;"><span class="label-full">[ ◀ BACK TO SYSTEM MAP ]</span><span class="label-short">[ ◀ BACK ]</span></button>
+            <div id="focus-label" class="focus-label"></div>
+            <button id="back-to-map-btn" class="back-btn"><span class="label-full">[ ◀ BACK TO SYSTEM MAP ]</span><span class="label-short">[ ◀ BACK ]</span></button>
         </div>
-        <div class="ambient-top-stack">
-            <div class="ambient-panel ambient-scan-panel">
-                <div class="ambient-panel-header"><span class="label-full">SEC_SCAN // AUX_FEED</span><span class="label-short">SCAN</span></div>
-                <div class="ambient-panel-body" id="scan-panel-body"></div>
+        <div class="map-container">
+            <canvas id="mapCanvas"></canvas>
+            <div class="ambient-top-stack">
+                <div class="ambient-panel ambient-scan-panel">
+                    <div class="ambient-panel-header"><span class="label-full">SEC_SCAN // AUX_FEED</span><span class="label-short">SCAN</span></div>
+                    <div class="ambient-panel-body" id="scan-panel-body"></div>
+                </div>
+                <div class="ambient-panel ambient-waveform-panel">
+                    <div class="ambient-panel-header"><span class="label-full">SCAN WAVE // SONAR RETURN</span><span class="label-short">WAVE</span></div>
+                    <canvas id="scan-waveform-canvas" class="ambient-waveform-canvas"></canvas>
+                </div>
             </div>
-            <div class="ambient-panel ambient-waveform-panel">
-                <div class="ambient-panel-header"><span class="label-full">SCAN WAVE // SONAR RETURN</span><span class="label-short">WAVE</span></div>
-                <canvas id="scan-waveform-canvas" class="ambient-waveform-canvas"></canvas>
+            <div class="ambient-bottom-stack">
+                <div class="ambient-panel ambient-bounty-panel">
+                    <div class="ambient-panel-header"><span class="label-full">BOUNTY / THREAT BOARD</span><span class="label-short">BOUNTY</span></div>
+                    <div class="ambient-bounty-body" id="bounty-panel-body"></div>
+                </div>
+                <div class="ambient-panel ambient-news-panel">
+                    <div class="ambient-panel-header"><span class="label-full">STANTON WIRE // NEWS_FEED</span><span class="label-short">NEWS</span></div>
+                    <div class="ambient-panel-body" id="news-panel-body"></div>
+                </div>
             </div>
+            <div id="flicker-overlay" class="crt-flicker-overlay"></div>
         </div>
-        <div class="ambient-bottom-stack">
-            <div class="ambient-panel ambient-bounty-panel">
-                <div class="ambient-panel-header"><span class="label-full">BOUNTY / THREAT BOARD</span><span class="label-short">BOUNTY</span></div>
-                <div class="ambient-bounty-body" id="bounty-panel-body"></div>
-            </div>
-            <div class="ambient-panel ambient-news-panel">
-                <div class="ambient-panel-header"><span class="label-full">STANTON WIRE // NEWS_FEED</span><span class="label-short">NEWS</span></div>
-                <div class="ambient-panel-body" id="news-panel-body"></div>
-            </div>
-        </div>
-        <div id="flicker-overlay" class="crt-flicker-overlay"></div>
     </div>
 </div>
 
