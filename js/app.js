@@ -411,6 +411,8 @@ window.onload = () => {
 
     initAmbientPanels();
 
+    updateFocusUI();
+
 };
 
 
@@ -2790,21 +2792,15 @@ function updateFocusUI() {
     if (!btn || !label) return;
 
 
-    if (focusedPlanet) {
+    // Always visible now (it's a toolbar row, not a conditional overlay) -
 
-        btn.style.display = 'inline-block';
+    // greyed out via the disabled state when not zoomed into a planet,
 
-        label.style.display = 'block';
+    // rather than hidden entirely.
 
-        label.innerText = `FOCUS: ${focusedPlanet.toUpperCase()}`;
+    btn.disabled = !focusedPlanet;
 
-    } else {
-
-        btn.style.display = 'none';
-
-        label.style.display = 'none';
-
-    }
+    label.innerText = focusedPlanet ? `FOCUS: ${focusedPlanet.toUpperCase()}` : 'FOCUS: —';
 
 }
 
