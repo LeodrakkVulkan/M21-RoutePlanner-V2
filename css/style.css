@@ -50,6 +50,7 @@ header {
 }
 
 .header-left { display: flex; align-items: center; gap: 15px; }
+.header-subtitle { font-size: 0.85rem; color: #aaa; }
 h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
 
 .terminal-logo { height: 40px; width: auto; border-radius: 50%; }
@@ -626,32 +627,75 @@ canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: 
 
 @media (max-width: 850px) {
     .ambient-panel {
-        width: 190px;
+        width: 130px;
+        background: rgba(10, 5, 0, 0.55);
+        box-shadow: none;
+        border-color: rgba(187, 130, 73, 0.5);
+    }
+
+    .ambient-panel-header {
+        font-size: 0.52rem;
+        padding: 3px 6px;
     }
 
     .ambient-panel-body {
-        min-height: 90px;
-        font-size: 0.64rem;
+        min-height: 50px;
+        font-size: 0.54rem;
+        line-height: 1.4;
+        padding: 5px 7px;
     }
 
     .ambient-bounty-body {
-        height: 90px;
-        padding: 8px;
+        height: 56px;
+        padding: 6px;
+        gap: 6px;
     }
 
+    .ambient-bounty-body svg {
+        width: 26px !important;
+        height: auto !important;
+    }
+
+    .bounty-label { font-size: 0.5rem; }
+    .bounty-name { font-size: 0.58rem; margin-top: 1px; }
+    .bounty-charge { font-size: 0.48rem; margin-top: 1px; }
+    .bounty-reward { font-size: 0.52rem; margin-top: 2px; }
+    .pirate-alert-text { font-size: 0.5rem; }
+
     #news-panel-body {
-        height: 270px;
-        min-height: 270px;
+        height: 168px;
+        min-height: 168px;
     }
 
     .ambient-waveform-canvas {
-        height: 50px;
+        height: 32px;
+    }
+
+    .ambient-top-stack,
+    .ambient-bottom-stack {
+        gap: 6px;
     }
 }
 
+/* Even more minimal at phone widths - the map is quite small here, so the
+   ambient screens step back further to stay out of the way. */
 @media (max-width: 480px) {
     .ambient-bottom-stack {
         display: none;
+    }
+
+    .ambient-panel {
+        width: 108px;
+        background: rgba(10, 5, 0, 0.45);
+    }
+
+    .ambient-panel-body {
+        min-height: 38px;
+        font-size: 0.5rem;
+    }
+
+    .ambient-waveform-canvas {
+        height: 26px;
     }
 }
 
@@ -726,7 +770,30 @@ canvas.crt-glitching {
 @media (max-width: 850px) {
     body { overflow-y: auto; }
     .main-container { flex-direction: column; height: auto; overflow: visible; }
-    
+
+    header {
+        flex-wrap: wrap;
+        padding: 8px 12px;
+        gap: 4px 10px;
+    }
+
+    .header-left {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .terminal-logo {
+        height: 28px;
+    }
+
+    .header-subtitle {
+        font-size: 0.62rem;
+    }
+
+    #sys-time {
+        font-size: 0.75rem;
+    }
+
     .control-panel {
         width: 100%;
         border-right: none;
@@ -746,4 +813,36 @@ canvas.crt-glitching {
     }
 
     h1 { font-size: 1.1rem; }
+
+    .map-hud {
+        top: 8px;
+        left: 8px;
+        gap: 6px;
+    }
+
+    .focus-label {
+        font-size: 0.68rem;
+        padding: 4px 7px;
+    }
+
+    .back-btn {
+        font-size: 0.62rem;
+        padding: 6px 8px;
+    }
+}
+
+/* At phone widths, drop the subtitle line entirely - the title and clock
+   alone are enough context, and this keeps the header to one tidy row. */
+@media (max-width: 480px) {
+    .header-subtitle {
+        display: none;
+    }
+
+    .terminal-logo {
+        height: 24px;
+    }
+
+    header {
+        padding: 6px 10px;
+    }
 }
