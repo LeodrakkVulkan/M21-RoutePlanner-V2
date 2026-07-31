@@ -687,47 +687,31 @@ canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: 
     .bounty-reward { font-size: 0.48rem; margin-top: 2px; }
     .pirate-alert-text { font-size: 0.46rem; }
 
-    /* Break the stack wrappers out of layout entirely so each panel becomes
-       an independently-positioned direct child of .map-container - lets us
-       put one box in each corner instead of two stacked on one side. */
-    .ambient-top-stack,
-    .ambient-bottom-stack {
-        position: static;
-        display: contents;
-    }
-
-    .ambient-scan-panel {
-        position: absolute;
+    /* Two full-height flex columns, one per side, each holding its original
+       pair of panels: right column = scan (top) + wave (bottom), left
+       column = bounty (top) + news (bottom). justify-content: space-between
+       pushes each pair to opposite ends for a "one box per corner" look,
+       but - unlike independently anchoring each box to top/bottom pixel
+       offsets - flexbox lays out children in normal (non-overlapping) flow,
+       so on a short map the pair simply moves closer together instead of
+       overlapping. This is what actually guarantees no collision, rather
+       than just hoping the map is tall enough. */
+    .ambient-top-stack {
         top: 8px;
-        right: 8px;
-        z-index: 15;
-        pointer-events: none;
-    }
-
-    .ambient-waveform-panel {
-        position: absolute;
         bottom: 8px;
         right: 8px;
-        z-index: 15;
-        pointer-events: none;
+        left: auto;
+        justify-content: space-between;
     }
 
-    .ambient-bounty-panel {
-        position: absolute;
-        /* Offset below the map-hud's focus-label/back-button, which also
-           occupies the top-left corner when zoomed into a planet. */
+    .ambient-bottom-stack {
+        /* Starts lower than the right column to clear the map-hud's
+           focus-label/back-button, which also lives in the top-left. */
         top: 48px;
-        left: 8px;
-        z-index: 15;
-        pointer-events: none;
-    }
-
-    .ambient-news-panel {
-        position: absolute;
         bottom: 8px;
         left: 8px;
-        z-index: 15;
-        pointer-events: none;
+        right: auto;
+        justify-content: space-between;
     }
 }
 
